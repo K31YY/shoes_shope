@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CATEGORIES, PRODUCTS } from '../data'
+import { CATEGORIES, PRODUCTS } from '../../data'
 import ProductCard from './ProductCard'
 
 export default function PopularProducts() {
