@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   ChevronDown,
   Footprints,
@@ -11,29 +12,37 @@ import {
 } from 'lucide-react'
 
 const NAV_LINKS = [
-  { label: 'Home', href: '#top' },
-  { label: 'Shoes', href: '#popular', dropdown: ['Running', 'Casual', 'Formal', 'Trail'] },
-  { label: 'Sneakers', href: '#popular' },
-  { label: 'Boots', href: '#popular' },
-  { label: 'Contact', href: '#footer' },
-  { label: 'Blogs', href: '#popular' },
+  { label: 'Home', href: '/' },
+  { 
+    label: 'Shoes', 
+    href: '/', 
+    dropdown: [
+      { name: 'Running', href: '/shoes/running' },
+      { name: 'Casual', href: '/shoes/casual' },
+      { name: 'Formal', href: '/shoes/formal' },
+      { name: 'Trail', href: '/shoes/trail' },
+    ] 
+  },
+  { label: 'Sneakers', href: '/' },
+  { label: 'Boots', href: '/' },
+  { label: 'Contact', href: '/' },
+  { label: 'Blogs', href: '/' },
 ]
 
 function Logo() {
   return (
-    <a href="#top" className="flex items-center gap-2.5">
+    <Link to="/" className="flex items-center gap-2.5">
       <span className="grid h-10 w-10 place-items-center rounded-2xl bg-crimson text-white shadow-sm shadow-crimson/30">
         <Footprints className="h-5 w-5 -rotate-12" strokeWidth={2.4} aria-hidden="true" />
       </span>
       <span className="font-display text-2xl font-black lowercase tracking-tight">
         shoes<span className="text-crimson">vibe</span>
       </span>
-    </a>
+    </Link>
   )
 }
 
 export default function Header() {
-  // Mobile navigation open/collapse state
   const [menuOpen, setMenuOpen] = useState(false)
   const [query, setQuery] = useState('')
 
@@ -66,24 +75,26 @@ export default function Header() {
         <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => (
             <div key={link.label} className="group relative">
-              <a
-                href={link.href}
+              <Link
+                to={link.href}
                 className="flex items-center gap-1 border-b-2 border-transparent py-1 text-sm font-bold text-zinc-700 transition-colors hover:border-crimson hover:text-crimson"
               >
                 {link.label}
                 {link.dropdown && <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />}
-              </a>
+              </Link>
+
+              {/* Dropdown Menu */}
               {link.dropdown && (
                 <ul className="invisible absolute left-1/2 top-full z-50 w-44 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
                   <li className="overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-xl shadow-zinc-900/10">
-                    {link.dropdown.map((item) => (
-                      <a
-                        key={item}
-                        href="#popular"
+                    {link.dropdown.map((subItem) => (
+                      <Link
+                        key={subItem.name}
+                        to={subItem.href}
                         className="block px-4 py-2.5 text-sm font-semibold text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-crimson"
                       >
-                        {item}
-                      </a>
+                        {subItem.name}
+                      </Link>
                     ))}
                   </li>
                 </ul>
@@ -109,8 +120,8 @@ export default function Header() {
           >
             <Heart className="h-5 w-5" />
           </button>
-          <a
-            href="#popular"
+          <Link
+            to="/"
             className="relative flex h-10 items-center gap-2 rounded-full px-3 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-crimson"
           >
             <span className="relative">
@@ -120,7 +131,7 @@ export default function Header() {
               </span>
             </span>
             <span className="hidden text-sm font-bold xl:inline">My Cart</span>
-          </a>
+          </Link>
 
           {/* Hamburger */}
           <button
@@ -145,30 +156,31 @@ export default function Header() {
           <ul className="mt-3 divide-y divide-zinc-100">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
-                <a
-                  href={link.href}
+                <Link
+                  to={link.href}
                   onClick={() => setMenuOpen(false)}
                   className="block py-3 font-display text-base font-bold tracking-wide text-zinc-800 hover:text-crimson"
                 >
                   {link.label}
-                </a>
+                </Link>
+                {link.dropdown && (
+                  <ul className="pl-4 pb-2 space-y-2">
+                    {link.dropdown.map((subItem) => (
+                      <li key={subItem.name}>
+                        <Link
+                          to={subItem.href}
+                          onClick={() => setMenuOpen(false)}
+                          className="block text-sm font-medium text-zinc-500 hover:text-crimson"
+                        >
+                          ↳ {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex gap-3">
-            <a
-              href="#top"
-              className="flex flex-1 items-center justify-center gap-2 rounded-full border border-zinc-200 py-2.5 text-sm font-bold text-zinc-700"
-            >
-              <User className="h-4 w-4" /> Account
-            </a>
-            <a
-              href="#top"
-              className="flex flex-1 items-center justify-center gap-2 rounded-full border border-zinc-200 py-2.5 text-sm font-bold text-zinc-700"
-            >
-              <Heart className="h-4 w-4" /> Wishlist
-            </a>
-          </div>
         </nav>
       )}
     </header>
